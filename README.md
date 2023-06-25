@@ -78,3 +78,6 @@ Now you can start developing your app!
 - Auto generated TailwindCSS & ESLint by create-next-app
 - Prisma client.ts in app/prisma/ folder
 - Auth.js route.ts in app/api/auth/[...nextauth]/route.ts
+
+## Tutorial times:
+25.06: 56:48
