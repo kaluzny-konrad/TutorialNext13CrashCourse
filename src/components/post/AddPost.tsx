@@ -2,14 +2,34 @@
 
 import React from "react";
 import { FaSpinner } from "react-icons/fa";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function AddPost() {
   const [title, setTitle] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(title);
+    setIsLoading(true);
+
+    console.log('handle', title)
+
+    try {
+      await fetch("/api/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title }),
+      });
+    } catch (error: any) {
+      setError(error.message);
+      console.log(error.message)
+    }
+
+    setIsLoading(false);
   };
 
   return (
@@ -31,18 +51,19 @@ export default function AddPost() {
       </div>
       <div className="flex items-center justify-between gap-2">
         <p
-         className={`text-sm ${title.length > 300 ? "text-red-500" : "text-slate-500"}`}
-        
-        >{title.length}/300</p>
+          className={`text-sm ${
+            title.length > 300 ? "text-red-500" : "text-slate-500"
+          }`}
+        >
+          {title.length}/300
+        </p>
         {isLoading ? (
-          <FaSpinner className="w-5 h-5 mr-7 my-1 animate-spin text-slate-600" 
-          onClick={() => setIsLoading(false)}/>
+          <FaSpinner className="w-5 h-5 mr-7 my-1 animate-spin text-slate-600" />
         ) : (
           <button
             type="submit"
             className="px-4 py-1 text-sm font-semibold text-white bg-slate-500 rounded-md duration-300 flex items-center justify-center w-20 hover:bg-slate-600"
             disabled={isLoading}
-            onClick={() => setIsLoading(true)}
           >
             Submit
           </button>
