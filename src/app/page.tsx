@@ -1,7 +1,7 @@
 export default function Home() {
   return (
-    <main className="">
-      <p className="test">Test</p>
+    <main className="p-4">
+      <h1 className="text-4xl font-bold">Hello world!</h1>
     </main>
   )
 }
