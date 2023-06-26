@@ -82,3 +82,4 @@ Now you can start developing your app!
 
 ## Tutorial times:
 25.06: 56:48
+26.06: 1:38
