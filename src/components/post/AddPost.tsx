@@ -10,26 +10,24 @@ export default function AddPost() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    console.log('handle', title)
-
-    try {
-      await fetch("/api/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title }),
-      });
-    } catch (error: any) {
-      setError(error.message);
-      console.log(error.message)
+  const { mutate } = useMutation(
+    async (title: string) => await axios.post("/api/posts", { title }),
+    {
+      onError: (error: any) => {
+        setError(error.response.data.message);
+        setIsLoading(false);
+      },
+      onSuccess: () => {
+        setTitle("");
+        setIsLoading(false);
+      },
     }
+  );
 
-    setIsLoading(false);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+    mutate(title);
   };
 
   return (
