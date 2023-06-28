@@ -2,22 +2,27 @@
 
 import React from "react";
 import { FaSpinner } from "react-icons/fa";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import toast from "react-hot-toast";
 
 export default function AddPost() {
   const [title, setTitle] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const [toastPostID, setToastPostID] = React.useState("");
 
   const { mutate } = useMutation(
     async (title: string) => await axios.post("/api/posts", { title }),
     {
       onError: (error: any) => {
-        setError(error.response.data.message);
+        if (error instanceof AxiosError) {
+          console.log(`error... ${toastPostID}`,);
+          toast.error(error?.response?.data, { id: toastPostID });
+        }
         setIsLoading(false);
       },
       onSuccess: () => {
+        toast.success("Post has been made!", { id: toastPostID });
         setTitle("");
         setIsLoading(false);
       },
@@ -27,6 +32,7 @@ export default function AddPost() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
+    setToastPostID(toast.loading("Posting..."));
     mutate(title);
   };
 

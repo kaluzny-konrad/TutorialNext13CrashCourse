@@ -79,7 +79,10 @@ Now you can start developing your app!
 - Prisma client.ts in app/prisma/ folder
 - Auth.js route.ts in app/api/auth/[...nextauth]/route.ts
 - API route in app/api/posts/route instead of pages/ - await request.json();
-
+- using     `setToastPostID(toast.loading("Posting..."))`; instead of `toastPostID = toast.loading("Posting...", { id: "post" })`;
 ## Tutorial times:
 25.06: 56:48
 26.06: 1:38
+28.06: 1:44
+
+- stopped at 2:05 due to annoying bugs in the tutorial.

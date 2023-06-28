@@ -14,9 +14,10 @@ export async function POST(request: NextRequest) {
     });
     const authorId = prismaUser?.id as string;
 
-    const title = (await request.json()) as string;
-
-    if (!title || !title.length) return new NextResponse("Title is required", { status: 403 });
+    const body = await request.json();
+    const title = body.title as string;
+    if (!title || !title.length)
+      return new NextResponse("Title is required", { status: 403 });
 
     if (title.length > 300)
       return new NextResponse("Title is too long", { status: 403 });
@@ -35,6 +36,20 @@ export async function POST(request: NextRequest) {
         { status: 403 }
       );
     }
+  } catch (error: any) {
+    return new NextResponse(JSON.stringify({ err: error.message }), {
+      status: 403,
+    });
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const data = await prismaClient.post.findMany({
+      include: { author: true },
+      orderBy: { createdAt: "desc" },
+    });
+    return new NextResponse(JSON.stringify(data), { status: 200 });
   } catch (error: any) {
     return new NextResponse(JSON.stringify({ err: error.message }), {
       status: 403,
